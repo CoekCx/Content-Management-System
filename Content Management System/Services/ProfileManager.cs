@@ -65,8 +65,8 @@ namespace Content_Management_System.Services
                     var serializer = new JsonSerializer();
                     var defaultUsers = new List<User>
                     {
-                        new User("Admin", "1234"),
-                        new User("Visitor", "1234")
+                        new User("Admin", "1234", UserType.Admin),
+                        new User("Visitor", "1234", UserType.Visitor)
                     };
                     serializer.Serialize(jsonWriter, defaultUsers);
                 }

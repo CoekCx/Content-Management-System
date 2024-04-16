@@ -73,6 +73,7 @@ namespace Content_Management_System
                 labelPasswordError.Content = "";
                 this.Hide();
                 new MessageWindow($"Signed in as {selectedUser.Name}", "Login Success").ShowDialog();
+                new Dashboard().ShowDialog();
                 this.Show();
             }
             else
