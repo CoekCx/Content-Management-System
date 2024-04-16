@@ -1,5 +1,6 @@
 ﻿using Content_Management_System.Services;
 using System;
+using System.IO;
 
 namespace Content_Management_System.Models
 {
@@ -19,13 +20,30 @@ namespace Content_Management_System.Models
             FilePath = "";
             CreatedOnDate = new DateTime();
         }
-        public Weapon(string name, int credits, string imgPath, string filePath, DateTime createdOnDate)
+        public Weapon(string name, int credits, string imgPath, DateTime createdOnDate)
         {
             Name = name;
             Credits = credits;
             ImgPath = imgPath;
-            FilePath = filePath;
+            FilePath = GetFilePath();
             CreatedOnDate = createdOnDate;
+        }
+
+        public void SetFilePath()
+        {
+            // Generate file path based on name
+            FilePath = ContentManager.GetDescriptionPath($"{Name}.rtf");
+
+            // Create a Uri object from the file path
+            Uri uri = new Uri(FilePath);
+
+            // Get the local file system path without the "file://" prefix
+            FilePath = uri.LocalPath;
+        }
+
+        private string GetFilePath()
+        {
+            return ContentManager.GetDescriptionPath($"{Name}.rtf");
         }
     }
 }

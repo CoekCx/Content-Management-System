@@ -9,6 +9,8 @@ using System.Reflection;
 using Content_Management_System.Models;
 using Content_Management_System.Services;
 using Content_Management_System.Persistance;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Content_Management_System.Views
 {
@@ -17,7 +19,7 @@ namespace Content_Management_System.Views
     /// </summary>
     public partial class Dashboard : Window
     {
-        private DataIO serializer = new DataIO();
+        private static DataIO serializer = new DataIO();
         public static BindingList<Weapon> Weapons { get; set; }
         public Dashboard()
         {
@@ -30,8 +32,8 @@ namespace Content_Management_System.Views
             DataContext = this;
             InitializeComponent();
 
-            Login();
             Icon = ContentManager.GetIcon();
+            Login();
         }
 
         private void Login()
@@ -80,9 +82,11 @@ namespace Content_Management_System.Views
                 this.DragMove();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            serializer.SerializeObject<BindingList<Weapon>>(Weapons, "weapons.xml");
-        }
+        private void Window_Closing(object sender, CancelEventArgs e) => SaveWeapons();
+
+        // Helper
+        public static void SaveWeapons() => serializer.SerializeObject<BindingList<Weapon>>(Weapons, "weapons.xml");
+
+        public static List<string> GetWeaponNames() => Weapons.Select(x => x.Name).ToList();
     }
 }

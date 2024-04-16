@@ -48,61 +48,87 @@ namespace Content_Management_System.Views
             cmbFontSize.ItemsSource = fontSizes;
         }
 
-        // Validation method
+        // Validation
         public bool validate()
         {
             bool result = true;
 
             // Name
-            if (textBoxName.Text.Trim().Equals(String.Empty) || textBoxName.Text.Trim().Equals("Enter weapon name"))
-            {
-                result = false;
-                labelNameError.Content = "Enter valid value into field";
-                textBoxName.BorderBrush = Brushes.Red;
-            }
-            else
-            {
-                labelNameError.Content = String.Empty;
-                textBoxName.BorderBrush = Brushes.Gray;
-            }
+            if(!validateName()) result = false;
 
             // Credits
-            if (textBoxCredits.Text.Trim().Equals(String.Empty) || textBoxCredits.Text.Trim().Equals("Enter credits amount") || !int.TryParse(textBoxCredits.Text.Trim(), out int x))
-            {
-                result = false;
-                labelCreditsError.Content = "Enter valid value into field";
-                textBoxCredits.BorderBrush = Brushes.Red;
-            }
-            else
-            {
-                labelCreditsError.Content = String.Empty;
-                textBoxCredits.BorderBrush = Brushes.Gray;
-            }
+            if(!validateCredits()) result = false;
 
             // Image
-            if (!File.Exists(TempWeapon.ImgPath))
+            if(!validateImage()) result = false;
+            
+            // RTB
+            if(!validateRTB()) result = false;
+
+            return result;
+        }
+
+        private bool validateName()
+        {
+            var existingNames = Dashboard.GetWeaponNames();
+
+            if (textBoxName.Text.Trim().Equals(String.Empty) || textBoxName.Text.Trim().Equals("Enter weapon name"))
             {
-                result = false;
-                labelImageError.Content = "Invalid image\nselected";
+                labelNameError.Content = "Enter valid value into field";
+                textBoxName.BorderBrush = Brushes.Red;
+                return false;
             }
-            else
+            else if (existingNames.Contains(textBoxName.Text.Trim()))
             {
-                labelImageError.Content = String.Empty;
+                labelNameError.Content = "Weapon with that name already exists";
+                textBoxName.BorderBrush = Brushes.Red;
+                return false;
             }
 
-            // RTB
+            labelNameError.Content = String.Empty;
+            textBoxName.BorderBrush = Brushes.Gray;
+            TempWeapon.Name = textBoxName.Text.Trim();
+            return true;
+        }
+
+        private bool validateCredits()
+        {
+            if (textBoxCredits.Text.Trim().Equals(String.Empty) || textBoxCredits.Text.Trim().Equals("Enter credits amount") || !int.TryParse(textBoxCredits.Text.Trim(), out int x))
+            {
+                labelCreditsError.Content = "Enter valid value into field";
+                textBoxCredits.BorderBrush = Brushes.Red;
+                return false;
+            }
+
+            labelCreditsError.Content = String.Empty;
+            textBoxCredits.BorderBrush = Brushes.Gray;
+            TempWeapon.Credits = int.Parse(textBoxCredits.Text.Trim());
+            return true;
+        }
+
+        private bool validateImage()
+        {
+            if (!File.Exists(TempWeapon.ImgPath))
+            {
+                labelImageError.Content = "Invalid image\nselected";
+                return false;
+            }
+            
+            labelImageError.Content = String.Empty;
+            return true;
+        }
+
+        private bool validateRTB()
+        {
             string text = new TextRange(rtbEditor.Document.ContentStart, rtbEditor.Document.ContentEnd).Text;
             if (text.Trim().Equals(""))
             {
-                result = false;
                 labelRTBError.Content = "Enter a valid\ndescription";
+                return false;
             }
-            else
-            {
-                labelRTBError.Content = "";
-            }
-
-            return result;
+            
+            labelRTBError.Content = "";
+            return true;
         }
 
         // Name
@@ -119,7 +145,7 @@ namespace Content_Management_System.Views
 
         private void textBoxName_LostFocus(object sender, RoutedEventArgs e)
         {
-            validate();
+            validateName();
             if (textBoxName.Text.Trim().Equals(string.Empty))
             {
                 textBoxName.Text = "Enter weapon name";
@@ -141,7 +167,7 @@ namespace Content_Management_System.Views
 
         private void textBoxCredits_LostFocus(object sender, RoutedEventArgs e)
         {
-            validate();
+            validateCredits();
             if (textBoxCredits.Text.Trim().Equals(string.Empty))
             {
                 textBoxCredits.Text = "Enter credits amount";
@@ -160,7 +186,7 @@ namespace Content_Management_System.Views
                 ImagePreview.Source = new BitmapImage(new Uri(selectedPath));
                 TempWeapon.ImgPath = selectedPath;
             }
-            validate();
+            validateImage();
         }
 
         // RTB
@@ -226,13 +252,21 @@ namespace Content_Management_System.Views
             int wordCount = countWords(textRange.Text);
             tbWordCount.Text = $"Words: {wordCount}";
 
-            validate();
+            validateRTB();
         }
 
         // Buttons
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (validate()) Close();
+            if (!validate()) return;
+            if (!saveXamlPackage()) return;
+
+            TempWeapon.CreatedOnDate = DateTime.Now;
+            Dashboard.Weapons.Add(TempWeapon);
+            Dashboard.SaveWeapons();
+            this.Hide();
+            new MessageWindow("Successfully added weapon!", "Success").ShowDialog();
+            this.Close();
         }
 
         private void buttonMinimize_Click(object sender, RoutedEventArgs e)
@@ -275,6 +309,36 @@ namespace Content_Management_System.Views
             }
 
             return wordCount;
+        }
+        
+        private bool saveXamlPackage() // Saves rtb content and the file path
+        {
+            TempWeapon.SetFilePath();
+            string fileName = TempWeapon.FilePath;
+
+            try
+            {
+                if (fileName != string.Empty)
+                {
+                    var myFile = File.Create(fileName);
+                    myFile.Close();
+                    rtbEditor.SelectAll();
+                    FileStream file = new FileStream(fileName, FileMode.Append, FileAccess.Write);
+                    rtbEditor.Selection.Save(file, System.Windows.DataFormats.Rtf);
+                    file.Close();
+                    return true;
+                }
+                else
+                {
+                    new MessageWindow("An error occured while\nsaving the file!", "Error").ShowDialog();
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                new MessageWindow("An error occured while\nsaving the file!", "Error").ShowDialog();
+                return false;
+            }
         }
     }
 }
