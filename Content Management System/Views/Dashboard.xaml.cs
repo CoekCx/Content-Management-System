@@ -8,6 +8,7 @@ using System.IO;
 using System.Reflection;
 using Content_Management_System.Models;
 using Content_Management_System.Services;
+using Content_Management_System.Persistance;
 
 namespace Content_Management_System.Views
 {
@@ -17,21 +18,37 @@ namespace Content_Management_System.Views
     public partial class Dashboard : Window
     {
         private DataIO serializer = new DataIO();
-        public static BindingList<Weapon> weapons { get; set; }
+        public static BindingList<Weapon> Weapons { get; set; }
         public Dashboard()
         {
-            weapons = serializer.DeSerializeObject<BindingList<Weapon>>("weapons.xml");
-            if (weapons == null)
+            Weapons = serializer.DeSerializeObject<BindingList<Weapon>>("weapons.xml");
+            if (Weapons == null)
             {
-                weapons = new BindingList<Weapon>();
+                Weapons = new BindingList<Weapon>();
             }
 
             DataContext = this;
             InitializeComponent();
 
-            if (MainWindow.LoggedInUser.Type == Models.UserType.Visitor) ButtonsPanel.Visibility = Visibility.Collapsed;
+            Login();
+            Icon = ContentManager.GetIcon();
+        }
 
-            Icon = new BitmapImage(new Uri(ContentManager.GetImagePath("cms.ico"))); // Set app icon
+        private void Login()
+        {
+            try
+            {
+                this.Hide();
+                new MainWindow().ShowDialog();
+                UpdateUI();
+                this.Show();
+            }
+            catch (Exception) { }
+        }
+
+        private void UpdateUI()
+        {
+            ButtonsPanel.Visibility = States.CurrentlyLoggedInUsersType == Models.UserType.Visitor ? Visibility.Collapsed : Visibility.Visible;
         }
 
         // Buttons
@@ -42,17 +59,18 @@ namespace Content_Management_System.Views
 
         private void buttonNewEntry_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Hide();
+            new NewEntry().ShowDialog();
+            this.Show();
         }
 
         private void buttonMinimize_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
         }
-
-        private void buttonClose_Click(object sender, RoutedEventArgs e)
+        private void SignOut(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Login();
         }
 
         // Window
@@ -64,7 +82,7 @@ namespace Content_Management_System.Views
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            serializer.SerializeObject<BindingList<Weapon>>(weapons, "weapons.xml");
+            serializer.SerializeObject<BindingList<Weapon>>(Weapons, "weapons.xml");
         }
     }
 }

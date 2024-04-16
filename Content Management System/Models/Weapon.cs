@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Content_Management_System.Services;
+using System;
 
 namespace Content_Management_System.Models
 {
@@ -10,6 +11,14 @@ namespace Content_Management_System.Models
         public string FilePath { get; set; }
         public DateTime CreatedOnDate { get; set; }
 
+        public Weapon()
+        {
+            Name = "";
+            Credits = 0;
+            ImgPath = "";
+            FilePath = "";
+            CreatedOnDate = new DateTime();
+        }
         public Weapon(string name, int credits, string imgPath, string filePath, DateTime createdOnDate)
         {
             Name = name;

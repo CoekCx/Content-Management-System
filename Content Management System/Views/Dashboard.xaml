@@ -55,7 +55,7 @@
                             Style="{StaticResource mainWindowCloseButton}"
                             Grid.Column="1"
                              Width="80"
-                            Click="buttonClose_Click">
+                            Click="SignOut">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="SignOut"
                                               Margin="0,2,0,0"

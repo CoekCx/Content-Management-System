@@ -4,7 +4,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Content_Management_System.Models;
+using Content_Management_System.Persistance;
 using Content_Management_System.Services;
 using Content_Management_System.Views;
 
@@ -24,6 +26,7 @@ namespace Content_Management_System
             InitializeComponent();
             ReadUsers();
             LoggedInUser = new User();
+            Icon = ContentManager.GetIcon();
         }
 
         // ComboBoxes
@@ -73,8 +76,8 @@ namespace Content_Management_System
                 labelPasswordError.Content = "";
                 this.Hide();
                 new MessageWindow($"Signed in as {selectedUser.Name}", "Login Success").ShowDialog();
-                new Dashboard().ShowDialog();
-                this.Show();
+                States.CurrentlyLoggedInUsersType = selectedUser.Type;
+                this.Close();
             }
             else
             {
@@ -89,7 +92,7 @@ namespace Content_Management_System
 
         private void buttonClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            System.Windows.Application.Current.Shutdown();
         }
 
         // Window

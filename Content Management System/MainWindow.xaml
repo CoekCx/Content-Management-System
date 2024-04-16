@@ -50,8 +50,6 @@
                             <ColumnDefinition Width="35"/>
                         </Grid.ColumnDefinitions>
 
-
-
                         <Button x:Name="btnMinimize"
                             Style="{StaticResource mainWindowMinimizeButton}"
                             Grid.Column="1"
