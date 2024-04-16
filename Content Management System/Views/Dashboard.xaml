@@ -9,7 +9,7 @@
         Title="Dashboard" Height="650" Width="1000"
         MouseDown="Window_MouseDown"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -102,6 +102,70 @@
                         <RowDefinition Height="4*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    
+                    <!--DataGrid-->
+                    <DataGrid x:Name="weaponsDataGrid"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              ItemsSource="{Binding weapons}"
+                              Height="450" Width="950"
+                              IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              HorizontalScrollBarVisibility="Visible"
+                              ScrollViewer.CanContentScroll="False"
+                              BorderBrush="{StaticResource winBorderColor1 }"
+                              BorderThickness="2">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#0072B8" />
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#0072B8" />
+                                </Style.Resources>
+                            </Style>
+                        </DataGrid.Resources>
+                        
+                        <DataGrid.Columns>
+                            <!--Image-->
+                            <DataGridTemplateColumn Header="" Width="150" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding ImgPath}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!--Name-->
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!--Credits-->
+                            <DataGridTextColumn Header="Credits" Binding="{Binding Credits}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <!--Created On Date-->
+                            <DataGridTextColumn Header="Created On Date" Binding="{Binding CreatedOnDate, StringFormat=\{0:dd.MM.yyyy\}}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                     <Grid x:Name="ButtonsPanel" Grid.Row="1">
                         <Grid.ColumnDefinitions>

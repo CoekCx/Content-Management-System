@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.ComponentModel;
+using System.IO;
+using System.Reflection;
+using Content_Management_System.Models;
+using Content_Management_System.Services;
 
 namespace Content_Management_System.Views
 {
@@ -19,10 +16,22 @@ namespace Content_Management_System.Views
     /// </summary>
     public partial class Dashboard : Window
     {
+        private DataIO serializer = new DataIO();
+        public static BindingList<Weapon> weapons { get; set; }
         public Dashboard()
         {
+            weapons = serializer.DeSerializeObject<BindingList<Weapon>>("weapons.xml");
+            if (weapons == null)
+            {
+                weapons = new BindingList<Weapon>();
+            }
+
+            DataContext = this;
             InitializeComponent();
+
             if (MainWindow.LoggedInUser.Type == Models.UserType.Visitor) ButtonsPanel.Visibility = Visibility.Collapsed;
+
+            Icon = new BitmapImage(new Uri(ContentManager.GetImagePath("cms.ico"))); // Set app icon
         }
 
         // Buttons
@@ -51,6 +60,11 @@ namespace Content_Management_System.Views
         {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            serializer.SerializeObject<BindingList<Weapon>>(weapons, "weapons.xml");
         }
     }
 }
