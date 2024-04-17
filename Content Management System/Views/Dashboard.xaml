@@ -48,10 +48,11 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="35"/>
+                            <ColumnDefinition Width="35"/>
                         </Grid.ColumnDefinitions>
 
 
-                        <Button x:Name="btnClose"
+                        <Button x:Name="btnSignOut"
                             Style="{StaticResource mainWindowCloseButton}"
                             Grid.Column="1"
                              Width="80"
@@ -75,6 +76,13 @@
                             Grid.Column="2"
                             Click="buttonMinimize_Click">
                             <fa:IconImage Icon="WindowMinimize"
+                                          Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+                        <Button x:Name="btnClose"
+                            Style="{StaticResource mainWindowCloseButton}"
+                            Grid.Column="3"
+                            Click="buttonClose_Click">
+                            <fa:IconImage Icon="Xmark"
                                           Style="{StaticResource controlButtonIcon}"/>
                         </Button>
                     </Grid>
@@ -106,7 +114,7 @@
                     <!--DataGrid-->
                     <DataGrid x:Name="weaponsDataGrid"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
-                              ItemsSource="{Binding weapons}"
+                              ItemsSource="{Binding Weapons}"
                               Height="450" Width="950"
                               IsReadOnly="True"
                               AutoGenerateColumns="False"
@@ -164,6 +172,38 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
+
+                            <!--Element buttons-->
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment ="Center" VerticalAlignment="Center" Margin="0, 0, 0, 5">
+                                            <!--Inspect button-->
+                                            <Button x:Name="buttonInspect"
+                                                    Grid.Column="1"
+                                                    Width="150"
+                                                    Style="{StaticResource classicButton}"
+                                                    Click="buttonClick_Inspect"
+                                                    Tag="{Binding Name}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <fa:IconImage Icon="MagnifyingGlass"
+                                                            Height="20"
+                                                            Margin="0,0,5,2"
+                                                            Style="{StaticResource classicButtonIcon}"/>
+                                                    <TextBlock
+                                                            Text="Inspect"
+                                                            Grid.Column="0"
+                                                            Margin="0,0,5,0"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Center"
+                                                            Style="{StaticResource logInTextBlock}"
+                                                            FontSize="15"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 

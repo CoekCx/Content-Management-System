@@ -54,6 +54,15 @@ namespace Content_Management_System.Views
         }
 
         // Buttons
+        private void buttonClick_Inspect(object sender, RoutedEventArgs e)
+        {
+            var name = (sender as Button).Tag;
+            var weaponIndex = Weapons.ToList().FindIndex(x => x.Name == name);
+            this.Hide();
+            new NewEntry(weaponIndex).ShowDialog();
+            this.Show();
+        }
+
         private void buttonDelete_Click(object sender, RoutedEventArgs e)
         {
 
@@ -66,13 +75,19 @@ namespace Content_Management_System.Views
             this.Show();
         }
 
+        private void SignOut(object sender, RoutedEventArgs e)
+        {
+            Login();
+        }
+
         private void buttonMinimize_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
         }
-        private void SignOut(object sender, RoutedEventArgs e)
+
+        private void buttonClose_Click(object sender, RoutedEventArgs e)
         {
-            Login();
+            System.Windows.Application.Current.Shutdown();
         }
 
         // Window

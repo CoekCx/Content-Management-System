@@ -28,7 +28,23 @@ namespace Content_Management_System.Models
             FilePath = GetFilePath();
             CreatedOnDate = createdOnDate;
         }
+        public Weapon(Weapon weapon)
+        {
+            Name = weapon.Name;
+            Credits = weapon.Credits;
+            ImgPath = weapon.ImgPath;
+            FilePath = weapon.FilePath;
+            CreatedOnDate = weapon.CreatedOnDate;
+        }
 
+        public void copyWeapon(Weapon weapon)
+        {
+            Name = weapon.Name;
+            Credits = weapon.Credits;
+            ImgPath = weapon.ImgPath;
+            FilePath = weapon.FilePath;
+            CreatedOnDate = weapon.CreatedOnDate;
+        }
         public void SetFilePath()
         {
             // Generate file path based on name

@@ -21,10 +21,14 @@ namespace Content_Management_System.Views
     {
         public Weapon TempWeapon { get; set; }
         List<double> fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+        public bool EditingMode { get; set; }
+        public string InitWeaponName { get; set; } = "";
+        public int WeaponIndex { get; set; }
 
         public NewEntry()
         {
             InitializeComponent();
+            EditingMode = false;
             TempWeapon = new Weapon();
             Icon = ContentManager.GetIcon();
 
@@ -42,6 +46,22 @@ namespace Content_Management_System.Views
 
             // Image
             ImagePreview.Source = ContentManager.GetPlaceholderImage();
+
+            // RTB
+            cmbFontFamily.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
+            cmbFontSize.ItemsSource = fontSizes;
+        }
+
+        public NewEntry(int weaponIndex)
+        {
+            InitializeComponent();
+            EditingMode = true;
+            WeaponIndex = weaponIndex;
+            var weapon = Dashboard.Weapons[weaponIndex];
+            TempWeapon = new Weapon(weapon);
+            InitWeaponName = weapon.Name;
+            Icon = ContentManager.GetIcon();
+            loadDataToView();
 
             // RTB
             cmbFontFamily.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
@@ -78,7 +98,7 @@ namespace Content_Management_System.Views
                 textBoxName.BorderBrush = Brushes.Red;
                 return false;
             }
-            else if (existingNames.Contains(textBoxName.Text.Trim()))
+            else if (existingNames.Where(x => x != InitWeaponName).Contains(textBoxName.Text.Trim()))
             {
                 labelNameError.Content = "Weapon with that name already exists";
                 textBoxName.BorderBrush = Brushes.Red;
@@ -261,6 +281,16 @@ namespace Content_Management_System.Views
             if (!validate()) return;
             if (!saveXamlPackage()) return;
 
+            if (EditingMode)
+            {
+                UpdateWeapons();
+                Dashboard.SaveWeapons();
+                this.Hide();
+                new MessageWindow("Successfully added weapon!", "Success").ShowDialog();
+                this.Close();
+                return;
+            }
+
             TempWeapon.CreatedOnDate = DateTime.Now;
             Dashboard.Weapons.Add(TempWeapon);
             Dashboard.SaveWeapons();
@@ -339,6 +369,50 @@ namespace Content_Management_System.Views
                 new MessageWindow("An error occured while\nsaving the file!", "Error").ShowDialog();
                 return false;
             }
+        }
+
+        private void loadDataToView()
+        {
+            textBoxName.Text = TempWeapon.Name;
+
+            textBoxCredits.Text = TempWeapon.Credits.ToString();
+
+            if (validateImage())
+            {
+                try
+                {
+                    ImagePreview.Source = new BitmapImage(new Uri(TempWeapon.ImgPath));
+                }
+                catch
+                {
+                    labelImageError.Content = "Failed to load\nimage";
+                }
+            }
+            else {
+                labelImageError.Content = "Image not found";
+            }
+
+            if (File.Exists(TempWeapon.FilePath))
+            {
+                TextRange range;
+                FileStream fStream;
+
+                range = new TextRange(rtbEditor.Document.ContentStart, rtbEditor.Document.ContentEnd);
+                fStream = new FileStream(TempWeapon.FilePath, FileMode.OpenOrCreate);
+                range.Load(fStream, System.Windows.DataFormats.Rtf);
+
+                fStream.Close();
+            }
+            else
+            {
+                labelRTBError.Content = "Couldn't load\ndescription";
+            }
+        }
+
+        private void UpdateWeapons()
+        {
+            Dashboard.Weapons.RemoveAt(WeaponIndex);
+            Dashboard.Weapons.Insert(WeaponIndex, TempWeapon);
         }
     }
 }
