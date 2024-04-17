@@ -24,9 +24,9 @@ namespace Content_Management_System.Views
 
         private void loadDataToView()
         {
-            textBoxName.Text = InspectWeapon.Name;
+            nameLabel.Content = InspectWeapon.Name;
 
-            textBoxCredits.Text = InspectWeapon.Credits.ToString();
+            creditsLabel.Content = InspectWeapon.Credits.ToString();
 
             if (File.Exists(InspectWeapon.FilePath))
             {

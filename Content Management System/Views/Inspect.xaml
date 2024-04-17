@@ -99,12 +99,12 @@
                                 BorderThickness="2 2 2 2"
                                 BorderBrush="DimGray" Background="#bababa"
                                 VerticalAlignment="Center" HorizontalAlignment="Center"
-                                Height="228" Width="309">
+                                Height="228" Width="375">
                         <Image
                                 x:Name="ImagePreview"
                                 Stretch="Fill"
                                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                                Height="228" Width="309"
+                                Height="228" Width="375"
                                 Margin="-1"/>
                     </Border>
 
@@ -144,14 +144,15 @@
                                Margin="0,0,0,0"
                                VerticalAlignment="Top" HorizontalAlignment="Left"
                                FontFamily="Bahnschrift Light" FontSize="22" FontWeight="Bold"/>
-                        <TextBox x:Name="textBoxName"
-                                Grid.Column="2"
-                                Margin="0,0,0,0"
-                                Padding="5,0,0,0"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
-                                Width="Auto" Height="35"
-                                IsReadOnly="True"/>
+                        <Label x:Name="nameLabel"
+                               Grid.Column="2"
+                               Content=""
+                               Height="35"
+                               Width="Auto"
+                               Margin="0,0,0,0"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"
+                               FontFamily="Bahnschrift Light" FontSize="22" FontWeight="Bold"/>
                     </Grid>
 
                     <!--Credits-->
@@ -171,14 +172,15 @@
                                VerticalAlignment="Top"
                                HorizontalAlignment="Left"
                                FontFamily="Bahnschrift Light" FontSize="22" FontWeight="Bold"/>
-                        <TextBox x:Name="textBoxCredits"
-                                Grid.Column="2"
-                                Margin="0,0,0,0"
-                                Padding="5,0,0,0"
-                                VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                                VerticalContentAlignment="Center"
-                                Width="Auto" Height="35"
-                                IsReadOnly="True"/>
+                        <Label x:Name="creditsLabel"
+                               Grid.Column="2"
+                               Content=""
+                               Height="35"
+                               Width="Auto"
+                               Margin="0,0,0,0"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"
+                               FontFamily="Bahnschrift Light" FontSize="22" FontWeight="Bold"/>
                     </Grid>
 
 
