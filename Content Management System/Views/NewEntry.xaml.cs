@@ -56,6 +56,7 @@ namespace Content_Management_System.Views
         {
             InitializeComponent();
             EditingMode = true;
+            title.Content = "Edit Entry";
             WeaponIndex = weaponIndex;
             var weapon = Dashboard.Weapons[weaponIndex];
             TempWeapon = new Weapon(weapon);

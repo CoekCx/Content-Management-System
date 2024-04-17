@@ -58,8 +58,10 @@ namespace Content_Management_System.Views
         {
             var name = (sender as Button).Tag;
             var weaponIndex = Weapons.ToList().FindIndex(x => x.Name == name);
+            var weapon = Weapons.FirstOrDefault(x => x.Name == name);
             this.Hide();
-            new NewEntry(weaponIndex).ShowDialog();
+            Window window = States.CurrentlyLoggedInUsersType != Models.UserType.Visitor ? new NewEntry(weaponIndex) : new Inspect(weapon);
+            window.ShowDialog();
             this.Show();
         }
 
