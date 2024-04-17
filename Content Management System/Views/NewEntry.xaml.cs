@@ -57,6 +57,7 @@ namespace Content_Management_System.Views
             InitializeComponent();
             EditingMode = true;
             title.Content = "Edit Entry";
+            buttonNewEntry.Content = "Save";
             WeaponIndex = weaponIndex;
             var weapon = Dashboard.Weapons[weaponIndex];
             TempWeapon = new Weapon(weapon);
@@ -287,7 +288,7 @@ namespace Content_Management_System.Views
                 UpdateWeapons();
                 Dashboard.SaveWeapons();
                 this.Hide();
-                new MessageWindow("Successfully added weapon!", "Success").ShowDialog();
+                new MessageWindow("Successfully saved changes\nto weapon!", "Success").ShowDialog();
                 this.Close();
                 return;
             }
@@ -390,7 +391,7 @@ namespace Content_Management_System.Views
                 }
             }
             else {
-                labelImageError.Content = "Image not found";
+                labelImageError.Content = "Image not\nfound";
             }
 
             if (File.Exists(TempWeapon.FilePath))

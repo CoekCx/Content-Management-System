@@ -18,4 +18,17 @@
     <Folder Include="Assets\Descriptions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\ConfirmationWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ConfirmationWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

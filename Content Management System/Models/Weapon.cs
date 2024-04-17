@@ -1,16 +1,38 @@
 ﻿using Content_Management_System.Services;
 using System;
+using System.ComponentModel;
 using System.IO;
 
 namespace Content_Management_System.Models
 {
-    public class Weapon
+    public class Weapon : INotifyPropertyChanged
     {
         public string Name { get; set; }
         public int Credits { get; set; }
         public string ImgPath { get; set; }
         public string FilePath { get; set; }
         public DateTime CreatedOnDate { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged("IsSelected");
+                }
+            }
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public Weapon()
         {

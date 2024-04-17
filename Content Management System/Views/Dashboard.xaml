@@ -13,6 +13,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/CheckBoxStyles.xaml"/>
                 <ResourceDictionary Source="../Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="../Styles/UIColors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -91,9 +92,9 @@
                 <!--Title-->
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="150"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="1"
@@ -135,7 +136,7 @@
                         
                         <DataGrid.Columns>
                             <!--Image-->
-                            <DataGridTemplateColumn Header="" Width="150" IsReadOnly="True">
+                            <DataGridTemplateColumn Header="" Width="300" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Source="{Binding ImgPath}"/>
@@ -144,37 +145,52 @@
                             </DataGridTemplateColumn>
 
                             <!--Name-->
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}">
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="5,0,0,0"/>
+                                        <Setter Property="FontFamily" Value="Bahnschrift Light"/>
+                                        <Setter Property="FontSize" Value="15"/>
+                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                        <Setter Property="Text" Value=""/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
                             <!--Credits-->
-                            <DataGridTextColumn Header="Credits" Binding="{Binding Credits}">
+                            <DataGridTextColumn Header="Credits" Binding="{Binding Credits}" Width="*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="5,0,0,0"/>
+                                        <Setter Property="FontFamily" Value="Bahnschrift Light"/>
+                                        <Setter Property="FontSize" Value="15"/>
+                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                        <Setter Property="Text" Value=""/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
                             <!--Created On Date-->
-                            <DataGridTextColumn Header="Created On Date" Binding="{Binding CreatedOnDate, StringFormat=\{0:dd.MM.yyyy\}}">
+                            <DataGridTextColumn Header="Created On Date" Binding="{Binding CreatedOnDate, StringFormat=\{0:dd.MM.yyyy\}}" Width="*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="5,0,0,0"/>
+                                        <Setter Property="FontFamily" Value="Bahnschrift Light"/>
+                                        <Setter Property="FontSize" Value="15"/>
+                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                        <Setter Property="Text" Value=""/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!--Element buttons-->
-                            <DataGridTemplateColumn Width="*">
+                            <!--Inspect button-->
+                            <DataGridTemplateColumn Width="175">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical" HorizontalAlignment ="Center" VerticalAlignment="Center" Margin="0, 0, 0, 5">
@@ -201,6 +217,17 @@
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <!-- Checkbox Column -->
+                            <DataGridTemplateColumn Header="" Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                                  Style="{StaticResource ModernTableCheckBoxStyle}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

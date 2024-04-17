@@ -15,6 +15,8 @@ namespace Content_Management_System.Services
         public static string GetImagePath(string imgName) => Path.Combine(imagesFolderPath, imgName);
         public static BitmapImage GetImage(string imgName) => new BitmapImage(new Uri(GetImagePath(imgName)));
         public static BitmapImage GetPlaceholderImage() => new BitmapImage(new Uri(GetImagePath("placeholder.png")));
+        public static BitmapImage GetImageNotFoundPlaceholder() => new BitmapImage(new Uri(GetImagePath("image not found.png")));
+        public static string GetImageNotFoundPlaceholderPath() => GetImagePath("image not found.png");
         public static BitmapImage GetIcon() => new BitmapImage(new Uri(GetImagePath("cms.ico")));
         public static string GetDescriptionPath(string descName) => Path.Combine(descriptionsFolderPath, descName);
     }
